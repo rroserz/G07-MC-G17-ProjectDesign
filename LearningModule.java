@@ -1,5 +1,5 @@
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
 
 /**
  * Creator: Siti Nur Amira binti Zulkiply
@@ -35,12 +35,12 @@ public class LearningModule implements ContentRenderable {
         
         // 10 Paragraphs of Content
         pageTexts = new String[]{
-            "Sustainable Development Goal 12 is about Responsible Consumption and Production. It simply means we should think carefully before we buy things, use them wisely, and throw them away properly so we don't destroy our planet.",
-            "Electronic waste, or 'e-waste', happens when we throw away old gadgets like TVs, laptops, and chargers. It is the fastest-growing type of trash in the world because we constantly buy new technology.",
+            "Sustainable Development Goal 12 is about Responsible Consumption and Production. It simply means we should think carefully before we buy things, use them wisely and throw them away properly so we don't destroy our planet.",
+            "Electronic waste, or 'e-waste', happens when we throw away old gadgets like TVs, laptops and chargers. It is the fastest-growing type of trash in the world because we constantly buy new technology.",
             "Think about smartphones. Many people buy a new phone every year just because a newer model comes out, even if their old phone works perfectly fine. This creates a massive amount of unnecessary waste.",
             "E-waste is dangerous. Gadgets contain harmful chemicals like lead and mercury. When we throw phones in a normal trash bin, these chemicals leak into the soil and water, poisoning plants and animals.",
-            "The easiest way to help is to simply buy less. Before buying a new gadget, ask yourself: 'Do I really need this, or do I just want it?' Keeping your current devices longer makes a huge difference.",
-            "If you must get a new device, don't throw the old one in the trash! Give it to a family member, donate it to a school, or sell it online. If it still works, let someone else use it.",
+            "The easiest way to help is to simply buy less. Before buying a new gadget, ask yourself: 'Do I really need this or do I just want it?' Keeping your current devices longer makes a huge difference.",
+            "If you must get a new device, don't throw the old one in the trash! Give it to a family member, donate it to a school or sell it online. If it still works, let someone else use it.",
             "When a gadget breaks, our first instinct is to throw it away. Instead, try to fix it! Replacing a cracked screen or a dead battery is much cheaper and better for the earth than buying a whole new device.",
             "If a device is completely broken and cannot be fixed, it must be recycled properly. Never put it in the regular trash. Take it to a special e-waste drop-off center where they can safely melt down the metals and plastics.",
             "Did you know there is real gold and silver inside your computer? When we recycle old electronics, factories can take those valuable metals out and use them to build new phones, saving the earth from more destructive mining.",
@@ -49,9 +49,9 @@ public class LearningModule implements ContentRenderable {
         
         // 10 Image Paths (Ensure these match the files in your project folder)
         imagePaths = new String[]{
-            "images/intro.jpg", "images/ewaste.jpg", "images/phones.png",
-            "images/toxic.jpg", "images/reduce.jpg", "images/reuse.png",
-            "images/repair.jpg", "images/recycle.png", "images/mining.jpg", "images/smart.png"
+            "images/intro.jpg", "images/ewaste.jpg", "images/phone.jpg",
+            "images/toxic.jpg", "images/reduce.jpg", "images/reuse.jpg",
+            "images/repair.jpg", "images/recycle.jpg", "images/mining.jpg", "images/smart.jpg"
         };
     }
 
@@ -62,6 +62,25 @@ public class LearningModule implements ContentRenderable {
         }
         
         String cardName = "Page" + pageNum;
+        cardLayout.show(mainPanel, cardName);
+        System.out.println("Displaying: " + pageTitles[pageNum]);
+    }
+
+    @Override
+    public void displayPage(String topicTitle) throws PageNotFoundException {
+        for (int i = 0; i < pageTitles.length; i++) {
+            if (pageTitles[i].equalsIgnoreCase(topicTitle)) {
+                displayPage(i);
+                return;
+            }
+        }
+        throw new PageNotFoundException("Error: Topic '" + topicTitle + "' not found.");
+    }
+    
+    public String getTitle(int index) { return pageTitles[index]; }
+    public String getText(int index) { return pageTexts[index]; }
+    public String getImagePath(int index) { return imagePaths[index]; }
+}
         cardLayout.show(mainPanel, cardName);
         System.out.println("Displaying: " + pageTitles[pageNum]);
     }
