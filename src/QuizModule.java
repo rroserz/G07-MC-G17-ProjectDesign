@@ -1,3 +1,9 @@
+/**
+ *Member 2
+ *Name: Mohamad Syahmi bin Soria
+ *Matric ID: 84553
+ */
+
 import java.util.ArrayList;
 import java.util.List;
 
