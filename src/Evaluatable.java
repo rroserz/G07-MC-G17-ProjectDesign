@@ -1,4 +1,8 @@
+
 /**
+ *Member 2
+ *Name: Mohamad Syahmi bin Soria
+ *Matric ID: 84553
  * Evaluatable Interface
  * Defines the contract for evaluating quiz answers
  */
