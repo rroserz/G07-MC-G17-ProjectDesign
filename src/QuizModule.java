@@ -132,6 +132,17 @@ public class QuizModule implements Evaluatable {
     @Override
     public void checkAnswer() {
         calculateScore();
+
+        //  ------ INTEGRATION WITH MEMBER 3 ------
+        // Create gamification object to calculate badge and points
+        GamificationModule gamification = new GamificationModule();
+        gamification.awardBadge(this.finalScore); // Send quiz score percentage
+        
+        // Give 10 points for every correct answer
+        int pointsEarned = getCorrectAnswerCount() * 10;
+        gamification.addPoints(pointsEarned); 
+        
+        System.out.println("Gamification Updated: " + gamification.getCurrentBadge());
     }
     
     /**
