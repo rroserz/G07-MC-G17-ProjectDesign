@@ -92,14 +92,6 @@ public class SDGLearningApp extends JFrame {
 
             centerContent.add(imageLabel, BorderLayout.CENTER);
             pagePanel.add(centerContent, BorderLayout.CENTER);
-           
-          
-
-            imageLabel.setPreferredSize(new Dimension(300, 200));
-            imageLabel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-            
-            centerContent.add(imageLabel, BorderLayout.CENTER);
-            pagePanel.add(centerContent, BorderLayout.CENTER);
 
             JPanel navPanel = new JPanel();
             JButton homeBtn = new JButton("Home");
@@ -119,6 +111,11 @@ public class SDGLearningApp extends JFrame {
                 navPanel.add(nextBtn);
             } else {
                 JButton finishBtn = new JButton("Go to Quiz");
+                finishBtn.addActionListener(e -> {
+                    // Membina skrin kuiz secara dinamik dan memaparkannya
+                    buildQuizScreen();
+                    cardLayout.show(mainContainer, "QuizScreen");
+                });
                 // This connects to Member 2's Quiz Module
                 navPanel.add(finishBtn);
             }
@@ -126,6 +123,66 @@ public class SDGLearningApp extends JFrame {
             pagePanel.add(navPanel, BorderLayout.SOUTH);
             mainContainer.add(pagePanel, "Page" + i);
         }
+    }
+
+    /**
+     * GUI SCREEN FOR MEMBER 2 (QUIZ)
+     * This methods builds the Quiz GUI layout dynamically
+     */
+    private void buildQuizScreen() {
+        JPanel quizPanel = new JPanel(new BorderLayout());
+        quizPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        QuizModule quiz = new QuizModule(); // Memanggil objek kuiz Member 2
+        Question currentQ = quiz.getCurrentQuestion();
+
+        JLabel qNumLabel = new JLabel("Question " + quiz.getCurrentQuestionNumber() + " of " + quiz.getTotalQuestions());
+        qNumLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        quizPanel.add(qNumLabel, BorderLayout.NORTH);
+
+        JTextArea qText = new JTextArea(currentQ.getQuestionText());
+        qText.setFont(new Font("Arial", Font.BOLD, 16));
+        qText.setWrapStyleWord(true);
+        qText.setLineWrap(true);
+        qText.setEditable(false);
+        qText.setBackground(UIManager.getColor("Panel.background"));
+        quizPanel.add(qText, BorderLayout.CENTER);
+
+        // Memaparkan pilihan jawapan dalam bentuk butang
+        JPanel optionsPanel = new JPanel(new GridLayout(currentQ.getOptions().length, 1, 10, 10));
+        String[] options = currentQ.getOptions();
+        
+        for (int i = 0; i < options.length; i++) {
+            final int optionIndex = i;
+            JButton optBtn = new JButton(options[i]);
+            optBtn.addActionListener(e -> {
+                quiz.submitAnswer(optionIndex);
+                if (!quiz.isQuizComplete()) {
+                    // Refresh skrin untuk soalan seterusnya
+                    cardLayout.show(mainContainer, "Dashboard"); 
+                    buildQuizScreen();
+                    cardLayout.show(mainContainer, "QuizScreen");
+                } else {
+                    // Jika kuiz selesai, semak jawapan dan kemas kini Gamification
+                    quiz.checkAnswer();
+                    
+                    // Berikan 200 mata ganjaran ke modul awak kerana menyelesaikan kuiz
+                    GamificationModule GameMod = new GamificationModule();
+                    GameMod.awardBadge(quiz.getFinalScore());
+                    GameMod.addPoints(quiz.getCorrectAnswerCount() * 10);
+                    
+                    // Paparkan mesej pop-up ganjaran (Skala Pemarkahan Projek)
+                    String msg = "Quiz Finished!\nYour Score: " + quiz.getFinalScore() + "%\nBadge Earned: " + GameMod.getCurrentBadge();
+                    JOptionPane.showMessageDialog(this, msg, "Result", JOptionPane.INFORMATION_MESSAGE);
+                    
+                    cardLayout.show(mainContainer, "Dashboard");
+                }
+            });
+            optionsPanel.add(optBtn);
+        }
+        
+        quizPanel.add(optionsPanel, BorderLayout.SOUTH);
+        mainContainer.add(quizPanel, "QuizScreen");
     }
 
     public static void main(String[] args) {
